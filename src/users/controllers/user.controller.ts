@@ -1,10 +1,9 @@
-import { Body, ConflictException, Controller, HttpCode, InternalServerErrorException, Param, Patch, Post, Put, UsePipes } from "@nestjs/common";
-import { ZodValidationPipe } from "src/pipes/zod-validation-pipe";
+import { Body, ConflictException, Controller, HttpCode, InternalServerErrorException, Param, Patch, Post } from "@nestjs/common";
 import { CreateUserDto, createUserSchema } from "src/users/dtos/create-user.dto";
-import { UserRepository } from './repositories/user.repository';
-import { UpdateUserDto, updateUserSchema } from "./dtos/update-user.dto";
 import { Validate } from "src/decorators/validate.decorator";
 import { logError } from "src/logger/logger.singleton";
+import { updateUserSchema, UpdateUserDto } from "../dtos/update-user.dto";
+import { UserRepository } from "../repositories/user.repository";
 
 @Controller('/user')
 export class UserController {

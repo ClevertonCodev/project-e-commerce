@@ -33,9 +33,14 @@ export class UserRepository {
 
     private async checkAndCreateUser(nome: string, email: string, cpf: string, password: string, tipo: UserRole): Promise<User> {
         const userWithSameEmail = await this.prisma.user.findUnique({ where: { email } });
+        const userWithSameCpf = await this.prisma.user.findUnique({ where: { cpf } });
 
         if (userWithSameEmail) {
-            throw new ConflictException('Esse email já existe');
+            throw new ConflictException('Esse e-mail já existe');
+        }
+
+        if (userWithSameCpf) {
+            throw new ConflictException('Esse cpf já existe');
         }
 
         const hashedPassword = await hash(password, 8);

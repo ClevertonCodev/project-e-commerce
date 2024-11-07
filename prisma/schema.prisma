@@ -19,13 +19,14 @@ enum Status {
 }
 
 model User {
-  id       Int      @id @default(autoincrement())
+  id       Int       @id @default(autoincrement())
   nome     String
-  email    String   @unique
+  email    String    @unique
   password String
-  cpf      String   @unique
-  tipo     UserRole @default(CLIENT)
+  cpf      String    @unique
+  tipo     UserRole  @default(CLIENT)
   Pedido   Pedido[]
+  Produto  Produto[]
 
   @@map("users")
 }
@@ -38,6 +39,8 @@ model Produto {
   estoque   Int
   foto      String?
   pedidos   PedidoProduto[]
+  userId    Int
+  user      User            @relation(fields: [userId], references: [id])
   createdAt DateTime        @default(now())
   updatedAt DateTime        @updatedAt
 

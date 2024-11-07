@@ -1,13 +1,15 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './controllers/app.controller';
 import { PrismaService } from './prisma/prisma.service';
-import { UserController } from './users/user.controller';
+import { UserController } from './users/controllers/user.controller';
 import { ConfigModule } from '@nestjs/config';
 import { envSchema } from './env';
 import { AuthModule } from './auth/auth.module'
 import { AuthController } from './auth/auth.controller';
 import { UserRepository } from './users/repositories/user.repository';
 import { LoggerModule } from './logger/logger.module';
+import { ProductController } from './products/controllers/product.controller';
+import { ProductRepository } from './products/repositories/product.repository';
 
 @Module({
   imports: [ConfigModule.forRoot({
@@ -17,7 +19,7 @@ import { LoggerModule } from './logger/logger.module';
     AuthModule,
     LoggerModule
   ],
-  controllers: [AppController, UserController, AuthController],
-  providers: [PrismaService, UserRepository],
+  controllers: [AppController, UserController, AuthController, ProductController],
+  providers: [PrismaService, UserRepository, ProductRepository],
 })
 export class AppModule { }
