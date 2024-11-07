@@ -34,44 +34,39 @@ export class ProductRepository {
         return await this.prisma.produto.findMany();
     }
 
-    // // Buscar um produto pelo id
-    // async findOne(id: number): Promise<Produto | null> {
-    //     try {
-    //         return await this.prisma.produto.findUnique({
-    //             where: { id },
-    //         });
-    //     } catch (error) {
-    //         throw new Error(`Erro ao buscar produto com id ${id}: ` + error.message);
-    //     }
-    // }
+    async findById(id: number): Promise<Produto | null> {
+        return await this.prisma.produto.findUnique({
+            where: { id },
+        });
+    }
 
-    // // Atualizar um produto
-    // async updateProduto(id: number, data: UpdateProdutoDto): Promise<Produto> {
-    //     try {
-    //         return await this.prisma.produto.update({
-    //             where: { id },
-    //             data: {
-    //                 nome: data.nome,
-    //                 descricao: data.descricao,
-    //                 preco: data.preco,
-    //                 estoque: data.estoque,
-    //                 foto: data.foto,
-    //             },
-    //         });
-    //     } catch (error) {
-    //         throw new Error(`Erro ao atualizar produto com id ${id}: ` + error.message);
-    //     }
-    // }
+    async updateProduto(id: number, data: CreateProductDto): Promise<Produto> {
+        const product = await this.findById(id);
 
-    // // Excluir um produto
-    // async deleteProduto(id: number): Promise<Produto> {
-    //     try {
-    //         return await this.prisma.produto.delete({
-    //             where: { id },
-    //         });
-    //     } catch (error) {
-    //         throw new Error(`Erro ao excluir produto com id ${id}: ` + error.message);
-    //     }
-    // }
+        if (!product) {
+            throw new NotFoundException(`Produto não encontrado.`);
+        }
 
+        return await this.prisma.produto.update({
+            where: { id },
+            data: {
+                nome: data.nome,
+                descricao: data.descricao,
+                preco: data.preco,
+                estoque: data.estoque,
+                foto: data.foto,
+            },
+        });
+    }
+
+    async deleteProduto(id: number): Promise<Produto> {
+        const product = await this.findById(id);
+
+        if (!product) {
+            throw new NotFoundException(`Produto não encontrado.`);
+        }
+        return await this.prisma.produto.delete({
+            where: { id },
+        });
+    }
 }
