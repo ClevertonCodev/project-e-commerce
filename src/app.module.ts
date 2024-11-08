@@ -10,6 +10,7 @@ import { UserRepository } from './users/repositories/user.repository';
 import { LoggerModule } from './logger/logger.module';
 import { ProductController } from './products/controllers/product.controller';
 import { ProductRepository } from './products/repositories/product.repository';
+import { CartModule } from './cart/cart.module';
 
 @Module({
   imports: [ConfigModule.forRoot({
@@ -17,7 +18,8 @@ import { ProductRepository } from './products/repositories/product.repository';
     isGlobal: true
   }),
     AuthModule,
-    LoggerModule
+    LoggerModule,
+    CartModule
   ],
   controllers: [AppController, UserController, AuthController, ProductController],
   providers: [PrismaService, UserRepository, ProductRepository],
