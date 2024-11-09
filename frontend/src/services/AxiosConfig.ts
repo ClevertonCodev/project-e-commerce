@@ -1,8 +1,9 @@
-import axios, { AxiosRequestConfig } from "axios";
+import axios, { InternalAxiosRequestConfig } from "axios";
 import getToken from "./api/auth/GetToken"
+
 const apiUrl = process.env.API_URL;
 
-const getBearerToken = async (config: AxiosRequestConfig) => {
+const getBearerToken = async (config: InternalAxiosRequestConfig) => {
   const token = await getToken(true);
   const newConfig = { ...config };
 
@@ -16,9 +17,8 @@ const getBearerToken = async (config: AxiosRequestConfig) => {
 const api = axios.create({
   baseURL: `${apiUrl}/api/v1`,
   headers: {
-    Accept: "application/json",
-    "Content-Type": "application/x-www-form-urlencoded",
-  }
+    'Content-Type': 'application/json'
+  },
 });
 
 api.interceptors.request.use(getBearerToken);
