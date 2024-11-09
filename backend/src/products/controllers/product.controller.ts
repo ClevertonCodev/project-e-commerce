@@ -1,10 +1,12 @@
-import { Body, Controller, Post, HttpCode, InternalServerErrorException, NotFoundException, Get, Param, Put } from '@nestjs/common';
+import { Body, Controller, Post, HttpCode, InternalServerErrorException, NotFoundException, Get, Param, Put, UseGuards } from '@nestjs/common';
 import { ProductRepository } from '../repositories/product.repository';
 import { CreateProductDto, createProductSchema } from '../dtos/create-product.dto';
 import { Validate } from 'src/decorators/validate.decorator';
 import { logError } from 'src/logger/logger.singleton';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('/produto')
+@UseGuards(AuthGuard('jwt'))
 export class ProductController {
     constructor(private productRepository: ProductRepository) { }
 
@@ -18,6 +20,7 @@ export class ProductController {
             if (error instanceof NotFoundException) {
                 return error;
             }
+
             logError('Ocorreu um erro ao criar um produto', error);
             throw new InternalServerErrorException('Erro inesperado no servidor', {
                 description: 'Ocorreu um erro ao criar um produto'

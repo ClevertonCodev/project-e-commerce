@@ -9,7 +9,6 @@ export class ProductRepository {
 
     async createProduct(data: CreateProductDto): Promise<Produto> {
         const hasUser = await this.prisma.user.findUnique({ where: { id: data.userId } });
-
         if (!hasUser) {
             throw new NotFoundException(`Usuário não encontrado.`);
         }
@@ -20,7 +19,6 @@ export class ProductRepository {
                 descricao: data.descricao,
                 preco: data.preco,
                 estoque: data.estoque,
-                foto: data.foto,
                 userId: data.userId
             },
         });
@@ -54,7 +52,6 @@ export class ProductRepository {
                 descricao: data.descricao,
                 preco: data.preco,
                 estoque: data.estoque,
-                foto: data.foto,
             },
         });
     }
