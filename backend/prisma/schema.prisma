@@ -1,0 +1,72 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum UserRole {
+  ADMIN
+  CLIENT
+}
+
+enum Status {
+  PENDING
+  CANCELED
+  APPROVED
+}
+
+model User {
+  id       Int       @id @default(autoincrement())
+  nome     String
+  email    String    @unique
+  password String
+  cpf      String    @unique
+  tipo     UserRole  @default(CLIENT)
+  Pedido   Pedido[]
+  Produto  Produto[]
+
+  @@map("users")
+}
+
+model Produto {
+  id        Int             @id @default(autoincrement())
+  nome      String
+  descricao String?
+  preco     Float
+  estoque   Int
+  pedidos   PedidoProduto[]
+  userId    Int
+  user      User            @relation(fields: [userId], references: [id])
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+
+  @@map("produtos")
+}
+
+model Pedido {
+  id        Int             @id @default(autoincrement())
+  clienteId Int
+  data      DateTime        @default(now())
+  status    Status          @default(PENDING)
+  valor     Float
+  produtos  PedidoProduto[]
+  cliente   User            @relation(fields: [clienteId], references: [id])
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+
+  @@map("pedidos")
+}
+
+model PedidoProduto {
+  id        Int     @id @default(autoincrement())
+  pedidoId  Int
+  produtoId Int
+  valor     Float
+  pedido    Pedido  @relation(fields: [pedidoId], references: [id])
+  produto   Produto @relation(fields: [produtoId], references: [id])
+
+  @@map("pedido_produtos")
+}
