@@ -1,19 +1,22 @@
-import React from 'react';
-import { Route, Navigate } from 'react-router-dom';
+import { Navigate, Outlet } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { authGuard } from "../services/api/auth/Authorization";
+import Loader from "./loader/Loader";
 
-interface PrivateRouteProps {
-    element: JSX.Element;
-    path: string;
+function PrivateRoute() {
+    const [isLogged, setIsLogged] = useState<boolean | null>(null);
+
+    useEffect(() => {
+        const checkAuth = async () => {
+            const isAuthenticated = await authGuard();
+            setIsLogged(isAuthenticated);
+        };
+        checkAuth();
+    }, []);
+    if (isLogged === null) {
+        return <Loader />
+    }
+    return isLogged ? <Outlet /> : <Navigate to="/login" />;
 }
-
-const PrivateRoute: React.FC<PrivateRouteProps> = ({ element, path }) => {
-    const isAuthenticated = localStorage.getItem('authToken');
-    return (
-        <Route
-            path={path}
-            element={isAuthenticated ? element : <Navigate to="/login" />}
-        />
-    );
-};
 
 export default PrivateRoute;

@@ -5,24 +5,32 @@ import { useNavigate } from 'react-router-dom';
 import { LoginFormData, loginSchema } from '../../validations/LoginSchema';
 import { login } from '../../services/api/auth/Auth';
 import Loader from '../../components/loader/Loader';
+import FlashMessage from '../../components/flash-message/FlashMenssage';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
     const { register, handleSubmit, formState: { errors } } = useForm<LoginFormData>({
         resolver: zodResolver(loginSchema),
     });
 
     const onSubmit = async (data: LoginFormData) => {
         setLoading(true);
+        setError(null);
         try {
             const response = await login(data);
             if (response?.access_token) {
                 localStorage.setItem('access_token', response.access_token);
             }
             navigate('/dashboard');
-        } catch (error) {
-            console.log(error);
+        } catch (error: any) {
+            if (error.response && error.response.data && error.response.data.message) {
+                setError(error.response.data.message);
+            } else {
+                setError('Ocorreu um erro ao tentar fazer login.');
+            }
         } finally {
             setLoading(false);
         }
@@ -35,6 +43,7 @@ const Login = () => {
             ) : (
                 <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8">
                     <h2 className="text-2xl font-bold text-center text-gray-700 mb-6">Login</h2>
+                    {error && <FlashMessage message={error} color="red" />}
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="mb-4">
                             <label className="block text-gray-700">E-mail</label>
@@ -65,6 +74,12 @@ const Login = () => {
                             Entrar
                         </button>
                     </form>
+                    <div className="mt-4 text-center">
+                        <p className="text-sm text-gray-600">Ainda não tem uma conta?</p>
+                        <Link to="/register-user" className="text-blue-500 hover:text-blue-700">
+                            Registre-se aqui
+                        </Link>
+                    </div>
                 </div>
             )}
         </div>

@@ -19,7 +19,7 @@ export class UserController {
 
         } catch (error) {
             if (error instanceof ConflictException) {
-                return error;
+                throw error;
             }
             logError('Ocorreu um erro ao criar o usuário', error);
             throw new InternalServerErrorException('Erro inesperado no servidor', {

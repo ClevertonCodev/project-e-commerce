@@ -1,7 +1,7 @@
 import getToken from "./GetToken";
 import decodeToken from "./DecodeToken";
 
-export const authGuard = async () => {
+export const authGuard = async (): Promise<boolean> => {
     try {
         const token = await getToken();
 
@@ -14,9 +14,10 @@ export const authGuard = async () => {
         if (!decoded) {
             return false;
         }
-
+        localStorage.setItem('user_type', decoded.userType);
         const currentTime = Date.now() / 1000;
-        if (decoded.exp < currentTime) {
+
+        if (decoded.iat + 3600 < currentTime) {
             return false;
         }
 
