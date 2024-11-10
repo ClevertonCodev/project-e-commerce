@@ -13,12 +13,12 @@ export class ProductController {
     @Post()
     @Validate(createProductSchema)
     @HttpCode(201)
-    async create(@Body() body: CreateProductDto) {
+    async create(@Body() request: CreateProductDto) {
         try {
-            return await this.productRepository.createProduct(body);
+            return await this.productRepository.createProduct(request);
         } catch (error) {
             if (error instanceof NotFoundException) {
-                return error;
+                throw error;
             }
 
             logError('Ocorreu um erro ao criar um produto', error);
@@ -28,10 +28,11 @@ export class ProductController {
         }
     }
 
-    @Get(':id?')
+    @Get('all/:id?')
     @HttpCode(200)
     async findAll(@Param('id') userId?: number,) {
         const idUser = userId ? Number(userId) : undefined;
+        console.log(await this.productRepository.findAll(idUser));
         return await this.productRepository.findAll(idUser);
     }
 

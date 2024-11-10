@@ -1,7 +1,7 @@
 import axios, { InternalAxiosRequestConfig } from "axios";
 import getToken from "./api/auth/GetToken"
 
-const apiUrl = process.env.API_URL;
+const apiUrl = import.meta.env.VITE_API_URL;
 
 const getBearerToken = async (config: InternalAxiosRequestConfig) => {
   const token = await getToken(true);
@@ -15,7 +15,7 @@ const getBearerToken = async (config: InternalAxiosRequestConfig) => {
 };
 
 const api = axios.create({
-  baseURL: `${apiUrl}/api/v1`,
+  baseURL: apiUrl,
   headers: {
     'Content-Type': 'application/json'
   },

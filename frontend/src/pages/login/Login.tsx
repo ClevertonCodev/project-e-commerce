@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate } from 'react-router-dom';
@@ -43,7 +43,7 @@ const Login = () => {
             ) : (
                 <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8">
                     <h2 className="text-2xl font-bold text-center text-gray-700 mb-6">Login</h2>
-                    {error && <FlashMessage message={error} color="red" />}
+                    {error && <FlashMessage message={error} success={false} />}
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="mb-4">
                             <label className="block text-gray-700">E-mail</label>

@@ -27,3 +27,18 @@ export const authGuard = async (): Promise<boolean> => {
     }
 };
 
+export const user = async (): Promise<number | undefined> => {
+    const token = await getToken();
+    if (!token) {
+        return;
+    }
+
+    const decoded = decodeToken(token);
+
+    if (!decoded) {
+        return;
+    }
+
+    return decoded.sub
+}
+

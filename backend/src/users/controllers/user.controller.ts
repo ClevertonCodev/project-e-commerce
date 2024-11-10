@@ -11,10 +11,9 @@ export class UserController {
     @Post()
     @Validate(createUserSchema)
     @HttpCode(201)
-    async handler(@Body() body: CreateUserDto) {
+    async handler(@Body() request: CreateUserDto) {
         try {
-            const user = await this.userRepository.createUser(body);
-
+            const user = await this.userRepository.createUser(request);
             return user;
 
         } catch (error) {

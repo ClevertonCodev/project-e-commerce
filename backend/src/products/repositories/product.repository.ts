@@ -26,7 +26,17 @@ export class ProductRepository {
 
     async findAll(userId?: number): Promise<Produto[]> {
         if (userId) {
-            return await this.prisma.produto.findMany({ where: { id: userId } });
+            return await this.prisma.$queryRaw`
+                SELECT 
+                    p.*, 
+                    u.nome AS nome_usuario
+                FROM 
+                    produtos p
+                LEFT JOIN 
+                    users u ON p."userId" = u.id
+                WHERE 
+                    p."userId" = ${userId}
+            `;
         }
 
         return await this.prisma.produto.findMany();

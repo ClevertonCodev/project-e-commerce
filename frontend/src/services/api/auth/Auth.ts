@@ -21,3 +21,4 @@ export const registerUserAdmin = async (request: RegisterFormData): Promise<Regi
     const response = await axios.post(`${api}/user`, data);
     return response.data;
 };
+
