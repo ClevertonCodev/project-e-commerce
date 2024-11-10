@@ -6,13 +6,13 @@ import { logError } from 'src/logger/logger.singleton';
 import { AuthGuard } from '@nestjs/passport';
 
 @Controller('/produto')
-@UseGuards(AuthGuard('jwt'))
 export class ProductController {
     constructor(private productRepository: ProductRepository) { }
 
     @Post()
     @Validate(createProductSchema)
     @HttpCode(201)
+    @UseGuards(AuthGuard('jwt'))
     async create(@Body() request: CreateProductDto) {
         try {
             return await this.productRepository.createProduct(request);

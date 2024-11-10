@@ -107,17 +107,64 @@ export class OrderRepository {
         });
     }
 
-    async findAll() {
+    async findAll(userId?: number) {
+        if (userId) {
+            return await this.prisma.$queryRaw`
+                SELECT 
+                    pe.id AS pedido_id,
+                    pe.data AS pedido_data,
+                    pe.status AS pedido_status,
+                    u.nome AS nome_usuario,
+                    u.id AS id_user,
+                    JSON_AGG(
+                        JSON_BUILD_OBJECT(
+                            'produto_id', p.id,
+                            'produto_nome', p.nome,
+                            'produto_descricao', p.descricao,
+                            'pedido_produto_valor', pp.valor
+                        )
+                    ) AS items
+                FROM 
+                    pedidos pe
+                LEFT JOIN 
+                    pedido_produtos pp ON pe.id = pp."pedidoId"
+                LEFT JOIN 
+                    produtos p ON pp."produtoId" = p.id
+                LEFT JOIN 
+                    users u ON pe."clienteId" = u.id
+                WHERE 
+                    pe."clienteId" = CAST(${userId} AS INTEGER)
+                GROUP BY
+                    pe.id, pe.data, pe.status, u.nome, u.id
+            `;
+        }
+
         return await this.prisma.$queryRaw`
-        SELECT 
-            p.*, 
-            u.nome AS nome_usuario
-        FROM 
-            produtos p
-        LEFT JOIN 
-            users u ON p."userId" = u.id
-        WHERE 
-            p."userId" = ${userId}
-    `;
+            SELECT 
+                pe.id AS pedido_id,
+                pe.data AS pedido_data,
+                pe.status AS pedido_status,
+                u.nome AS nome_usuario,
+                u.id AS id_user,
+                JSON_AGG(
+                    JSON_BUILD_OBJECT(
+                        'produto_id', p.id,
+                        'produto_nome', p.nome,
+                        'produto_descricao', p.descricao,
+                        'pedido_produto_valor', pp.valor
+                    )
+                ) AS items
+            FROM 
+                pedidos pe
+            LEFT JOIN 
+                pedido_produtos pp ON pe.id = pp."pedidoId"
+            LEFT JOIN 
+                produtos p ON pp."produtoId" = p.id
+            LEFT JOIN 
+                users u ON pe."clienteId" = u.id
+            GROUP BY
+                pe.id, pe.data, pe.status, u.nome, u.id
+        `;
     }
+
 }

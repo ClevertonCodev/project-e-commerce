@@ -1,9 +1,10 @@
-import { Controller, Post, Body, Param, BadRequestException, NotFoundException, Get, HttpCode, InternalServerErrorException } from '@nestjs/common';
+import { Controller, Post, Body, Param, BadRequestException, NotFoundException, Get, HttpCode, InternalServerErrorException, UseGuards } from '@nestjs/common';
 import { CartService } from 'src/cart/services/cart.service';
 import { logError } from 'src/logger/logger.singleton';
 import { CreateClientDto } from 'src/users/dtos/create-client.dto';
 import { UserRepository } from '../../users/repositories/user.repository';
 import { OrderRepository } from '../repositories/order.respository';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('pedido')
 export class OrderController {
@@ -59,19 +60,13 @@ export class OrderController {
         }
     }
 
-    @Get()
+    @Get(':id?')
     @HttpCode(201)
-    async getOrders() {
+    @UseGuards(AuthGuard('jwt'))
+    async getOrders(@Param('id') userId?: number,) {
         try {
-            const clientWithCpf = await this.userRepository.getUserWinhCpf(request.cpf)
-            const client = !clientWithCpf ? await this.userRepository.createUserClient(request) : clientWithCpf;
-            if (!client) {
-                throw new InternalServerErrorException('Erro inesperado no servidor');
-            }
-            const response = await this.orderRepository.save(client, this.cartService);
-            return {
-                success: response
-            }
+            const idUser = userId ? Number(userId) : undefined;
+            return await this.orderRepository.findAll(userId);
         } catch (error) {
             if (error instanceof NotFoundException || error instanceof BadRequestException) {
                 throw error;
