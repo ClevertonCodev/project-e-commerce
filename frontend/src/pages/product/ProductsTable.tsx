@@ -36,8 +36,8 @@ const ProductTable = () => {
         getProducts();
     }, []);
 
-    const handleDelete = (productToDelete: number) => {
-
+    const handleDelete = (productid: number) => {
+        alert('não implementado');
     };
     return (
         <Layout title={'Produtos'}>

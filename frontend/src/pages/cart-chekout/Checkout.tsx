@@ -45,9 +45,7 @@ const Checkout = () => {
     const total = totalCart(cartItems);
 
     const removeItem = (index: number) => {
-        const newCartItems = [...cartItems];
-        newCartItems.splice(index, 1);
-        setCartItems(newCartItems);
+        alert('não implementado');
     };
 
     const completePurchase = async (client: RegisterClientFormData) => {
@@ -101,7 +99,7 @@ const Checkout = () => {
                             ) : (
                                 <>
                                     {
-                                        cartItems.map((item) => (
+                                        cartItems.map((item, index) => (
                                             <tr key={item.productId}>
                                                 <td className="px-4 py-2 border-b text-center text-gray-500">{item.name}</td>
                                                 <td className="px-4 py-2 border-b text-center text-gray-500">{item.qtty}</td>
@@ -111,6 +109,7 @@ const Checkout = () => {
                                                     <button
                                                         className="text-red-500 bg-blue-50 bg-opacity-50 hover:text-red-700 transition duration-200"
                                                         title="Excluir"
+                                                        onClick={() => removeItem(index)}
                                                     >
                                                         <FontAwesomeIcon icon={faTrash} />
                                                     </button>

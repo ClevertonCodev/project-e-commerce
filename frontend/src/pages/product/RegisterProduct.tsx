@@ -122,14 +122,19 @@ const RegisterProduct = () => {
                             </div>
                             <button
                                 type="submit"
-                                className="w-full py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 focus:outline-none"
+                                className="w-full py-2 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-700 focus:outline-none"
                             >
                                 Cadastrar
                             </button>
                         </form>
                         <div className="w-full text-center mt-4">
-                            <Link to="/produtos" className="text-blue-500 hover:text-blue-700">
-                                Voltar
+                            <Link to="/produtos" >
+                                <button
+                                    type="submit"
+                                    className="w-full py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 focus:outline-none"
+                                >
+                                    Voltar
+                                </button>
                             </Link>
                         </div>
                     </div>
