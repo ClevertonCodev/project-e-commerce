@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
-
+import { logout } from '../../services/api/auth/Auth';
 
 interface LayoutProps {
     title: string;
@@ -10,7 +10,9 @@ interface LayoutProps {
 
 const LayoutAdmin = (props: LayoutProps) => {
     const userType = localStorage.getItem('user_type');
-
+    const exit = () => {
+        logout()
+    }
     return (
         <div>
             <title>{props.title}</title>
@@ -18,7 +20,7 @@ const LayoutAdmin = (props: LayoutProps) => {
                 <nav className="bg-blue-600 p-4 shadow-md">
                     <div className="container mx-auto flex justify-between items-center">
                         <Link to="/dashboard" className="text-white font-semibold text-xl hover:text-blue-200">
-                            Dashboard
+                            Pedidos
                         </Link>
                         <div className="space-x-4">
                             {userType === 'CLIENT' && (
@@ -36,8 +38,8 @@ const LayoutAdmin = (props: LayoutProps) => {
                                     <Link to="/register-produto" className="text-white hover:text-blue-200">
                                         Registrar Produto
                                     </Link>
-                                    <Link to="#" className="text-white hover:text-blue-200">
-                                        Sair
+                                    <Link to="/" className="text-white hover:text-blue-200">
+                                        <span onClick={exit}>Sair</span>
                                     </Link>
                                 </>
                             )}

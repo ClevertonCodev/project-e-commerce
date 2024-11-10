@@ -74,6 +74,13 @@ const Login = () => {
                         >
                             Entrar
                         </button>
+                        <Link to="/">
+                            <button
+                                className={`w-full mt-4 py-2 px-4 text-white rounded-md transition duration-200 bg-blue-500 hover:bg-blue-600`}
+                            >
+                                Área compras
+                            </button>
+                        </Link>
                     </form>
                     <div className="mt-4 text-center">
                         <p className="text-sm text-gray-600">Ainda não tem uma conta?</p>

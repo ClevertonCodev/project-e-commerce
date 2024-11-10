@@ -22,3 +22,12 @@ export const orderSave = async (request: RegisterClientFormData) => {
     });
     return response.data;
 }
+
+export const getOrders = async (userId?: number | undefined) => {
+    if (userId) {
+        const response = await api.get(`/pedido/${userId}`);
+        return response.data;
+    }
+    const response = await api.get(`/pedido`);
+    return response.data;
+}

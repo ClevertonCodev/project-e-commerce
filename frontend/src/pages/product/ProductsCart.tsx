@@ -161,6 +161,13 @@ const ProductsCart = () => {
                                         Ir para o carrinho
                                     </button>
                                 </Link>
+                                <Link to="/login">
+                                    <button
+                                        className={`w-full mt-4 py-2 px-4 text-white rounded-md transition duration-200 bg-blue-500 hover:bg-blue-600`}
+                                    >
+                                        Area Admin
+                                    </button>
+                                </Link>
                             </div>
                         </>
                     )}
