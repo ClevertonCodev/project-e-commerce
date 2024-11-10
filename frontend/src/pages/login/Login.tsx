@@ -62,6 +62,7 @@ const Login = () => {
                                 type="password"
                                 {...register('password', { required: 'Este campo é obrigatório' })}
                                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500 text-gray-600"
+                                placeholder='Para ver suas revervas, a senha é seu cpf'
                             />
                             {errors.password && (
                                 <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>

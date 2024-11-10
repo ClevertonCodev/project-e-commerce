@@ -22,3 +22,8 @@ export const registerUserAdmin = async (request: RegisterFormData): Promise<Regi
     return response.data;
 };
 
+export const logout = async () => {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('user_type');
+}
+

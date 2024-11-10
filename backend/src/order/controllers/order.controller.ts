@@ -14,9 +14,9 @@ export class OrderController {
 
     @Post('/carrinho/add')
     @HttpCode(200)
-    async addCart(@Body() body: { products: { productId: number, qtty: number }[] }) {
+    async addCart(@Body() request: { products: { productId: number, qtty: number }[] }) {
         try {
-            const { products } = body;
+            const { products } = request;
             return await this.cartService.addItems(products);
         } catch (error) {
             if (error instanceof NotFoundException || error instanceof BadRequestException) {
@@ -29,7 +29,7 @@ export class OrderController {
         }
     }
 
-    @Get()
+    @Get('/chekout')
     @HttpCode(200)
     async getCart() {
         return this.cartService.getCart();
@@ -37,14 +37,41 @@ export class OrderController {
 
     @Post('/salvar')
     @HttpCode(201)
-    async save(@Body() body: CreateClientDto) {
+    async save(@Body() request: CreateClientDto) {
         try {
-            const clientWithCpf = await this.userRepository.getUserWinhCpf(body.cpf)
-            const client = !clientWithCpf ? await this.userRepository.createUserClient(body) : clientWithCpf;
+            const clientWithCpf = await this.userRepository.getUserWinhCpf(request.cpf)
+            const client = !clientWithCpf ? await this.userRepository.createUserClient(request) : clientWithCpf;
             if (!client) {
                 throw new InternalServerErrorException('Erro inesperado no servidor');
             }
-            await this.orderRepository.save(client, this.cartService);
+            const response = await this.orderRepository.save(client, this.cartService);
+            return {
+                success: response
+            }
+        } catch (error) {
+            if (error instanceof NotFoundException || error instanceof BadRequestException) {
+                throw error;
+            }
+            logError('Erro ao adicionar produto ao carrinho.', error);
+            throw new InternalServerErrorException('Erro inesperado no servidor', {
+                description: 'Erro ao adicionar produto ao carrinho.'
+            });
+        }
+    }
+
+    @Get()
+    @HttpCode(201)
+    async getOrders() {
+        try {
+            const clientWithCpf = await this.userRepository.getUserWinhCpf(request.cpf)
+            const client = !clientWithCpf ? await this.userRepository.createUserClient(request) : clientWithCpf;
+            if (!client) {
+                throw new InternalServerErrorException('Erro inesperado no servidor');
+            }
+            const response = await this.orderRepository.save(client, this.cartService);
+            return {
+                success: response
+            }
         } catch (error) {
             if (error instanceof NotFoundException || error instanceof BadRequestException) {
                 throw error;

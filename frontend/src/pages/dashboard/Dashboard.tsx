@@ -1,4 +1,4 @@
-import Layout from '../../components/laytout/LaytoutAdmin';
+import Layout from '../../components/laytouts/LaytoutAdmin';
 const Dashboard = () => {
     return (
         <div>

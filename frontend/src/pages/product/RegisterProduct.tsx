@@ -9,7 +9,7 @@ import { RegisterFormProduct, registerProductSchema } from '../../validations/Pr
 import { registerProduct } from '../../services/api/product/Product';
 import InputPrice from '../../components/input-price/InputPrice';
 import { user } from '../../services/api/auth/Authorization';
-import Layout from '../../components/laytout/LaytoutAdmin';
+import Layout from '../../components/laytouts/LaytoutAdmin';
 
 const RegisterProduct = () => {
     const navigate = useNavigate();

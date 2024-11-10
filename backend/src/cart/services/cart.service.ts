@@ -110,7 +110,7 @@ export class CartService {
     clear() {
         this.items = [];
         this.payment = 'PIX';
-        return this.commit
+        return this.commit();
     }
 
     getTotal(): number {

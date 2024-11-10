@@ -32,7 +32,6 @@ export class ProductController {
     @HttpCode(200)
     async findAll(@Param('id') userId?: number,) {
         const idUser = userId ? Number(userId) : undefined;
-        console.log(await this.productRepository.findAll(idUser));
         return await this.productRepository.findAll(idUser);
     }
 

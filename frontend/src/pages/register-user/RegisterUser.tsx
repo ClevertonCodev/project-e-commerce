@@ -47,7 +47,7 @@ const RegisterUserAdmin = () => {
                 <Loader height={50} />
             ) : (
                 <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8">
-                    <h2 className="text-2xl font-bold text-center text-gray-700 mb-6">Cadastro</h2>
+                    <h2 className="text-2xl font-bold text-center  text-gray-500 mb-6">Cadastro usuário</h2>
                     {error && <FlashMessage message={error} success={false} />}
                     {success && <FlashMessage message={'Salvo com sucesso'} success={true} />}
                     <form onSubmit={handleSubmit(onSubmit)}>

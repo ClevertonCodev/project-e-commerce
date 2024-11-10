@@ -1,12 +1,11 @@
 import { BadRequestException, NotFoundException } from "@nestjs/common";
-import { Pedido, PedidoProduto, Prisma, Status, User } from "@prisma/client";
+import { Prisma, Status, User } from "@prisma/client";
 import { CartService } from "src/cart/services/cart.service";
+import { logError } from "src/logger/logger.singleton";
 import { PrismaService } from "src/prisma/prisma.service";
-
-
 export class OrderRepository {
 
-    constructor(private prisma: PrismaService) { }
+    private prisma = new PrismaService();
 
     async save(client: User, carrinho: CartService) {
         const cart = carrinho.getCart();
@@ -24,16 +23,17 @@ export class OrderRepository {
                 }
 
                 for (const item of cart.items) {
-                    for (const i of item.qtty) {
-                        await this.createOrderProduct(order.id, i.productId, i.price);
+                    for (let i = 0; i < item.qtty; i++) {
+                        await this.createOrderProduct(order.id, item.productId, item.price);
                     }
                 }
 
                 await this.updateOrder(order.id, undefined, undefined, Status.APPROVED);
-
             });
+            carrinho.clear();
+            return true;
         } catch (error) {
-
+            logError('Erro ao adicionar produto ao carrinho.', error);
             throw new BadRequestException('Falha ao salvar o pedido.');
         }
     }
@@ -105,5 +105,19 @@ export class OrderRepository {
                 valor: money || orderProduct.valor,
             } as Prisma.PedidoProdutoUncheckedCreateInput
         });
+    }
+
+    async findAll() {
+        return await this.prisma.$queryRaw`
+        SELECT 
+            p.*, 
+            u.nome AS nome_usuario
+        FROM 
+            produtos p
+        LEFT JOIN 
+            users u ON p."userId" = u.id
+        WHERE 
+            p."userId" = ${userId}
+    `;
     }
 }

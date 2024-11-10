@@ -7,14 +7,14 @@ import { Produto } from '../../types/Produto';
 import Loader from '../../components/loader/Loader';
 import FlashMessage from '../../components/flash-message/FlashMenssage';
 import { Link } from 'react-router-dom';
-import Layout from '../../components/laytout/LaytoutAdmin';
+import Layout from '../../components/laytouts/LaytoutAdmin';
 
 const ProductTable = () => {
     const [products, setProducts] = useState<Produto[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    const initProducts = async () => {
+    const getProducts = async () => {
         const userId = await user();
         setLoading(true);
         if (!userId) {
@@ -33,7 +33,7 @@ const ProductTable = () => {
         }
     }
     useEffect(() => {
-        initProducts();
+        getProducts();
     }, []);
 
     const handleDelete = (productToDelete: number) => {
