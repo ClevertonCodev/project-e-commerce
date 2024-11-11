@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { logout } from '../../services/api/auth/Auth';
 
 interface LayoutProps {
@@ -10,8 +10,10 @@ interface LayoutProps {
 
 const LayoutAdmin = (props: LayoutProps) => {
     const userType = localStorage.getItem('user_type');
+    const navigate = useNavigate();
     const exit = () => {
-        logout()
+        logout();
+        navigate('/');
     }
     return (
         <div>
@@ -38,9 +40,9 @@ const LayoutAdmin = (props: LayoutProps) => {
                                     <Link to="/register-produto" className="text-white hover:text-blue-200">
                                         Registrar Produto
                                     </Link>
-                                    <Link to="/" className="text-white hover:text-blue-200">
-                                        <span onClick={exit}>Sair</span>
-                                    </Link>
+                                    <button type='button' className="text-white hover:text-blue-200" onClick={() => exit}>
+                                        Sair
+                                    </button>
                                 </>
                             )}
                         </div>
