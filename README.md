@@ -87,4 +87,4 @@ npm run dev
 
 ## Suporte
 
-Em caso de dúvidas ou problemas, consulte a documentação técnica ou entre em contato com a equipe de desenvolvimento.
+Em caso de dúvidas ou problemas, entre em contato.
